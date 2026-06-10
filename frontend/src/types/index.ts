@@ -25,3 +25,12 @@ export interface Preset {
   name: string
   params: Partial<SimulationParams>
 }
+
+export interface ObserverNote {
+  id: string
+  timestamp: number
+  content: string
+  screenshot: string | null
+  simMode: SimMode
+  simParams: SimulationParams
+}

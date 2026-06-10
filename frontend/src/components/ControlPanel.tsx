@@ -19,7 +19,7 @@ export default function ControlPanel() {
   const store = useSimStore()
 
   return (
-    <div className="w-80 bg-gray-900 border-l border-gray-700 p-4 overflow-y-auto flex flex-col gap-4">
+    <div className="p-4 overflow-y-auto flex flex-col gap-4 h-full">
       <h2 className="text-lg font-bold text-white">粒子物理模拟器</h2>
 
       {/* Mode */}

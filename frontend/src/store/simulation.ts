@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { SimMode, SimulationParams, Particle } from '../types'
+import type { SimMode, SimulationParams, Particle, ObserverNote } from '../types'
 
 const COLORS = ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#c084fc','#f472b6','#38bdf8']
 
@@ -26,6 +26,7 @@ interface SimStore extends SimulationParams {
   particles: Particle[]
   fps: number
   totalEnergy: number
+  notes: ObserverNote[]
   setMode: (mode: SimMode) => void
   setParticleCount: (count: number) => void
   setParam: <K extends keyof SimulationParams>(key: K, value: SimulationParams[K]) => void
@@ -33,6 +34,9 @@ interface SimStore extends SimulationParams {
   setFps: (fps: number) => void
   setTotalEnergy: (e: number) => void
   applyPreset: (preset: Partial<SimulationParams>) => void
+  addNote: (note: ObserverNote) => void
+  updateNote: (id: string, content: string) => void
+  deleteNote: (id: string) => void
 }
 
 export const useSimStore = create<SimStore>((set, get) => ({
@@ -47,6 +51,7 @@ export const useSimStore = create<SimStore>((set, get) => ({
   particles: randomParticles(300),
   fps: 0,
   totalEnergy: 0,
+  notes: [],
   setMode: (mode) => set({ mode }),
   setParticleCount: (count) => set({ particleCount: count, particles: randomParticles(count) }),
   setParam: (key, value) => set({ [key]: value } as any),
@@ -61,4 +66,11 @@ export const useSimStore = create<SimStore>((set, get) => ({
     const { particleCount } = get()
     set({ particles: randomParticles(particleCount) })
   },
+  addNote: (note) => set((s) => ({ notes: [note, ...s.notes] })),
+  updateNote: (id, content) => set((s) => ({
+    notes: s.notes.map((n) => n.id === id ? { ...n, content } : n),
+  })),
+  deleteNote: (id) => set((s) => ({
+    notes: s.notes.filter((n) => n.id !== id),
+  })),
 }))
